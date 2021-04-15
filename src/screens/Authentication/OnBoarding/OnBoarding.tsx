@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Animated, {
   interpolateColor,
@@ -54,7 +54,7 @@ const slide = [
   },
   {
     title: "Funky",
-    color: "#FFDDDD",
+    color: "#FFDDAA",
     subtitle: "Find Your Outfits",
     description:
       "confused about your outfit? Dont worry! Find the best outfit here",
@@ -77,30 +77,35 @@ const OnBoarding = () => {
     ),
   }));
 
+  const footercolor = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      x.value,
+      slide.map((_, i) => i * width),
+      slide.map((i) => i.color)
+    ),
+  }));
+
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.slider, slidercolor]}>
         <Animated.ScrollView
           horizontal
           snapToInterval={width}
-          decelerationRate="fast"
+          decelerationRate="normal"
           showsHorizontalScrollIndicator={false}
           bounces={false}
           scrollEventThrottle={16}
           onScroll={onScroll}
         >
-          <Slide label="Relaxed" />
-          <Slide label="Playful" right />
-          <Slide label="Excentric" />
-          <Slide label="Funky" right />
+          {slide.map(({ title }, index) => (
+            <Slide key={index} right={!!(index / 2)} title={title} />
+          ))}
         </Animated.ScrollView>
       </Animated.View>
       <View style={styles.footer}>
-        <View
-          style={{ ...StyleSheet.absoluteFillObject, backgroundColor: "cyan" }}
-        >
+        <Animated.View style={[styles.footer, footercolor]}>
           <View style={styles.footerOverlay}></View>
-        </View>
+        </Animated.View>
       </View>
     </View>
   );

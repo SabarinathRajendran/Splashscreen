@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 interface SlideProps {
-  label: string;
+  title: string;
   right?: boolean;
 }
 
@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get("window");
 
 const SLIDER_HEIGHT = 0.5 * height;
 
-const Slide = ({ label, right }: SlideProps) => {
+const Slide = ({ title, right }: SlideProps) => {
   const transform = [
     {
       translateY: SLIDER_HEIGHT / 2,
@@ -26,7 +26,7 @@ const Slide = ({ label, right }: SlideProps) => {
   return (
     <View style={styles.container}>
       <View style={{ ...styles.titlecontainer, transform }}>
-        <Text style={styles.title}>{label}</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
     </View>
   );
@@ -41,10 +41,11 @@ const styles = StyleSheet.create({
   },
   titlecontainer: {
     height: "auto",
+    width: "auto",
     justifyContent: "center",
   },
   title: {
-    fontSize: 50,
+    fontSize: 70,
     fontWeight: "bold",
     textAlign: "center",
     color: "#ffffff",

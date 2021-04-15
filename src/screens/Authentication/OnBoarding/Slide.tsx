@@ -44,8 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 80,
-    fontFamily: "Roboto",
+    fontSize: 50,
     fontWeight: "bold",
     textAlign: "center",
     color: "#ffffff",

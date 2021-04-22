@@ -1,6 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import AppLoading from "expo-app-loading";
+
+import {
+  useFonts,
+  Inter_900Black,
+  Inter_400Regular,
+} from "@expo-google-fonts/inter";
 
 import { OnBoarding } from "./src/screens/Authentication";
 
@@ -22,9 +29,18 @@ const AuthenticationNavigator = () => {
 };
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <AuthenticationNavigator />
-    </NavigationContainer>
-  );
+  let [FontLoading] = useFonts({
+    Inter_900Black,
+    Inter_400Regular,
+  });
+
+  if (!FontLoading) {
+    return <AppLoading />;
+  } else {
+    return (
+      <NavigationContainer>
+        <AuthenticationNavigator />
+      </NavigationContainer>
+    );
+  }
 }

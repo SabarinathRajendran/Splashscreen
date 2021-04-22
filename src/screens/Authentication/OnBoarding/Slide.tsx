@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 70,
-    fontWeight: "bold",
+    fontSize: height / 15,
+    fontFamily: "Inter_900Black",
     textAlign: "center",
     color: "#ffffff",
   },

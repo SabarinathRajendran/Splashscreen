@@ -1,14 +1,15 @@
-import React from "react";
+import React, { createRef } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import Animated, {
   interpolateColor,
-  multiply,
   useAnimatedScrollHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 import Slide from "./Slide";
 import SubSlide from "./SubSlide";
+import Pagination from "./Pagination";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   slider: {
     height: 0.62 * height,
     borderBottomRightRadius: BORDER_RADIUS,
+    overflow: "hidden",
   },
   footer: {
     flex: 1,
@@ -37,6 +39,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
+  pagination: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: BORDER_RADIUS,
+    width: width,
+
+    flexDirection: "row",
+  },
 });
 
 const slide = [
@@ -46,13 +56,15 @@ const slide = [
     subtitle: "Find Your Outfits",
     description:
       "confused about your outfit? Dont worry! Find the best outfit here",
+    picture: require("../../../../assets/images/girl_7.png"),
   },
   {
     title: "PLayful",
-    color: "#BEECC4",
+    color: "#FF7D6A",
     subtitle: "Find Your Outfits",
     description:
       "confused about your outfit? Dont worry! Find the best outfit here",
+    picture: require("../../../../assets/images/girl_3.png"),
   },
   {
     title: "Excentric",
@@ -60,13 +72,15 @@ const slide = [
     subtitle: "Find Your Outfits",
     description:
       "confused about your outfit? Dont worry! Find the best outfit here",
+    picture: require("../../../../assets/images/girl_2.png"),
   },
   {
     title: "Funky",
-    color: "#FFDDAA",
+    color: "#FFD868",
     subtitle: "Find Your Outfits",
     description:
       "confused about your outfit? Dont worry! Find the best outfit here",
+    picture: require("../../../../assets/images/girl_5.png"),
   },
 ];
 
@@ -102,10 +116,15 @@ const OnBoarding = () => {
     ],
   }));
 
+  const scroll = createRef<Animated.ScrollView>();
+
+  const currentindex = useDerivedValue(() => x.value / width);
+
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.slider, slidercolor]}>
         <Animated.ScrollView
+          ref={scroll}
           horizontal
           snapToInterval={width}
           decelerationRate="fast"
@@ -114,14 +133,29 @@ const OnBoarding = () => {
           scrollEventThrottle={16}
           onScroll={onScroll}
         >
-          {slide.map(({ title }, index) => (
-            <Slide key={index} right={!!(index % 2)} title={title} />
+          {slide.map(({ title, picture }, index) => (
+            <Slide
+              key={index}
+              right={!!(index % 2)}
+              title={title}
+              source={picture}
+            />
           ))}
         </Animated.ScrollView>
       </Animated.View>
       <View style={styles.footer}>
         <Animated.View style={[styles.footer, footercolor]}>
           <View style={styles.footerOverlay}>
+            <View style={styles.pagination}>
+              {slide.map((_, index) => (
+                //currentindex = divide{x, width}
+                <Pagination
+                  key={index}
+                  {...{ index }}
+                  currentindex={currentindex}
+                />
+              ))}
+            </View>
             <Animated.View
               style={[
                 styles.footerText,
@@ -135,6 +169,15 @@ const OnBoarding = () => {
                   last={index === slide.length - 1}
                   subtitle={subtitle}
                   description={description}
+                  onPress={() => {
+                    if (scroll.current) {
+                      //@ts-ignore  getNode is Deprecated
+                      scroll.current.scrollTo({
+                        x: width * (index + 1),
+                        animated: true,
+                      });
+                    }
+                  }}
                 />
               ))}
             </Animated.View>

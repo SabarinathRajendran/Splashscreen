@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 interface ButtonProps {
@@ -17,7 +17,7 @@ const Button = ({ label, varient, onPress }: ButtonProps) => {
   return (
     <RectButton
       style={[styles.container, { backgroundColor: BAckgroundColor }]}
-      onPress={onPress}
+      {...{ onPress }}
     >
       <Text style={[styles.text, { color: color }]}>{label}</Text>
     </RectButton>
@@ -30,11 +30,17 @@ export default Button;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    width: 275,
+    height: 50,
     borderRadius: 25,
+    textAlign: "center",
   },
   text: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "center",
+    fontWeight: "bold",
   },
 });

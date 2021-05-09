@@ -1,16 +1,17 @@
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
 interface SlideProps {
   title: string;
   right?: boolean;
+  source: number;
 }
 
 const { width, height } = Dimensions.get("window");
 
 const SLIDER_HEIGHT = 0.5 * height;
 
-const Slide = ({ title, right }: SlideProps) => {
+const Slide = ({ title, right, source }: SlideProps) => {
   const transform = [
     {
       translateY: SLIDER_HEIGHT / 2,
@@ -25,6 +26,13 @@ const Slide = ({ title, right }: SlideProps) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={source}
+        ></Image>
+      </View>
       <View style={{ ...styles.titlecontainer, transform }}>
         <Text style={styles.title}>{title}</Text>
       </View>
@@ -49,5 +57,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_900Black",
     textAlign: "center",
     color: "#ffffff",
+  },
+  imageContainer: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
+    marginTop: 20,
   },
 });

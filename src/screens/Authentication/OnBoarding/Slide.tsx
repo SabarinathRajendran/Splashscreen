@@ -1,17 +1,20 @@
 import React from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 interface SlideProps {
   title: string;
   right?: boolean;
   source: number;
+  currentIndex: Animated.SharedValue<number>;
+  index: number;
 }
 
 const { width, height } = Dimensions.get("window");
 
 const SLIDER_HEIGHT = 0.5 * height;
 
-const Slide = ({ title, right, source }: SlideProps) => {
+const Slide = ({ title, right }: SlideProps) => {
   const transform = [
     {
       translateY: SLIDER_HEIGHT / 2,
@@ -26,13 +29,6 @@ const Slide = ({ title, right, source }: SlideProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          resizeMode="contain"
-          source={source}
-        ></Image>
-      </View>
       <View style={{ ...styles.titlecontainer, transform }}>
         <Text style={styles.title}>{title}</Text>
       </View>

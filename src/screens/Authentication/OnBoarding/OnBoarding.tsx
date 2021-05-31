@@ -1,6 +1,8 @@
 import React, { createRef } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Image, Alert } from "react-native";
 import Animated, {
+  Extrapolate,
+  interpolate,
   interpolateColor,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -47,6 +49,15 @@ const styles = StyleSheet.create({
 
     flexDirection: "row",
   },
+  imageContainer: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
+    marginTop: 20,
+  },
 });
 
 const slide = [
@@ -61,25 +72,25 @@ const slide = [
   {
     title: "PLayful",
     color: "#FF7D6A",
-    subtitle: "Find Your Outfits",
+    subtitle: "Hear it First, Wear it First",
     description:
-      "confused about your outfit? Dont worry! Find the best outfit here",
+      "HAting the clothes in your collections?, Explore hundreds of outfit ideas",
     picture: require("../../../../assets/images/girl_3.png"),
   },
   {
     title: "Excentric",
     color: "#FFE4D9",
-    subtitle: "Find Your Outfits",
+    subtitle: "Look Good, Feel Good",
     description:
-      "confused about your outfit? Dont worry! Find the best outfit here",
+      "My feeling is that it’s not about how much something costs. If it looks great, It looks great.",
     picture: require("../../../../assets/images/girl_2.png"),
   },
   {
     title: "Funky",
     color: "#FFD868",
-    subtitle: "Find Your Outfits",
+    subtitle: "Your Style, Your Way",
     description:
-      "confused about your outfit? Dont worry! Find the best outfit here",
+      "Create your unique & individual outfits and look amazing everyday",
     picture: require("../../../../assets/images/girl_5.png"),
   },
 ];
@@ -123,6 +134,27 @@ const OnBoarding = () => {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.slider, slidercolor]}>
+        {slide.map((slide, i) => {
+          const opacity = useAnimatedStyle(() => ({
+            opacity: interpolate(
+              x.value,
+              [(i - 0.5) * width, i * width, (i + 0.5) * width],
+              [0, 1, 0],
+              Extrapolate.CLAMP
+            ),
+          }));
+
+          return (
+            <Animated.View key={i} style={[styles.imageContainer, opacity]}>
+              <Image
+                style={styles.image}
+                resizeMode="contain"
+                source={slide.picture}
+              ></Image>
+            </Animated.View>
+          );
+        })}
+
         <Animated.ScrollView
           ref={scroll}
           horizontal
@@ -137,6 +169,8 @@ const OnBoarding = () => {
             <Slide
               key={index}
               right={!!(index % 2)}
+              currentIndex={currentindex}
+              index={index}
               title={title}
               source={picture}
             />
@@ -170,7 +204,18 @@ const OnBoarding = () => {
                   subtitle={subtitle}
                   description={description}
                   onPress={() => {
-                    if (scroll.current) {
+                    if (index === slide.length - 1) {
+                      Alert.alert(
+                        "OnBoarding Project",
+                        "You Reached the Last Slide",
+                        [
+                          {
+                            text: "OK",
+                            onPress: () => console.log("OK Pressed"),
+                          },
+                        ]
+                      );
+                    } else if (scroll.current) {
                       //@ts-ignore  getNode is Deprecated
                       scroll.current.scrollTo({
                         x: width * (index + 1),
